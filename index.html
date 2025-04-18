@@ -1,1 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Níveis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 30px;
+    }
+    .level-box {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 400px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .progress-bar {
+      height: 25px;
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background-color: #4CAF50;
+      width: 0%;
+      transition: width 0.3s;
+    }
+  </style>
+</head>
+<body>
 
+  <div class="level-box">
+    <h1>Sistema de Níveis</h1>
+    <p id="nivel">Nível: 1</p>
+    <p id="xp">XP: 0 / 100</p>
+    <div class="progress-bar">
+      <div class="progress-bar-inner" id="progress"></div>
+    </div>
+    <button onclick="ganharXP()">Ganhar XP</button>
+  </div>
+
+  <script>
+    const xpTable = [
+      100, 110, 121, 133, 146, 161, 177, 194, 214, 235,
+      259, 285, 313, 344, 378, 416, 458, 504, 554, 609,
+      609, 609, 609, 609, 609, 669, 669, 669, 669, 669,
+      736, 736, 736, 736, 736, 809, 809, 809, 809, 809,
+      890, 890, 890, 890, 890, 979, 979, 979, 979, 979,
+      1077, 1077, 1077, 1077, 1077, 1184, 1184, 1184, 1184, 1184,
+      1362, 1362, 1362, 1362, 1362, 1566, 1566, 1566, 1566, 1566,
+      1801, 1801, 1801, 1801, 1801, 2071, 2071, 2071, 2071, 2071,
+      2382, 2382, 2382, 2382, 2382
+    ];
+
+    let nivelAtual = 1;
+    let xpAtual = 0;
+
+    function ganharXP() {
+      const ganho = Math.floor(Math.random() * 30) + 10; // Ganha de 10 a 39 XP
+      xpAtual += ganho;
+      atualizarNivel();
+    }
+
+    function atualizarNivel() {
+      while (nivelAtual <= xpTable.length && xpAtual >= xpTable[nivelAtual - 1]) {
+        xpAtual -= xpTable[nivelAtual - 1];
+        nivelAtual++;
+      }
+
+      const xpNecessario = xpTable[nivelAtual - 1] || 9999;
+      document.getElementById('nivel').innerText = `Nível: ${nivelAtual}`;
+      document.getElementById('xp').innerText = `XP: ${xpAtual} / ${xpNecessario}`;
+
+      const progressPercent = Math.min((xpAtual / xpNecessario) * 100, 100);
+      document.getElementById('progress').style.width = progressPercent + '%';
+    }
+  </script>
+
+</body>
+</html>
